@@ -1,0 +1,19 @@
+{
+    "subsystem": "rockchip_products",
+    "parts": {
+        "rockchip_products": {
+            "module_list": [
+                "//device/board/industio/${device_name}:purple_pi_oh_group",
+                "//vendor/industio/${product_name}/bluetooth:libbt_vendor",
+                "//vendor/industio/${product_name}/bluetooth:BCM43430A1.hcd",
+                "//vendor/industio/${product_name}/bluetooth:BCM4345C5.hcd",
+                "//device/board/industio/${device_name}/camera/vdi_impl/v4l2:camera_board_vdi_impl"
+            ],
+            "test_list": [
+                "//kernel/linux/build/test:linuxkerneltest",
+                "//device/board/industio/${device_name}/camera/vdi_impl/v4l2:camera_board_test"
+            ],
+            "inner_kits": []
+        }
+    }
+}

@@ -1,0 +1,18 @@
+{
+  "parts": {
+    "product_purple_pi_oh": {
+      "module_list": [
+        "//vendor/industio/purple_pi_oh/default_app_config:default_app_config",
+        "//vendor/industio/purple_pi_oh/image_conf:custom_image_conf",
+        "//vendor/industio/purple_pi_oh/preinstall-config:preinstall-config",
+        "//vendor/industio/purple_pi_oh/resourceschedule:resourceschedule",
+        "//vendor/industio/purple_pi_oh/etc:product_etc_conf",
+        "//vendor/industio/purple_pi_oh/hals/audio:hdf_audio_config",
+        "//vendor/industio/purple_pi_oh/hals/codec/:hdf_codec_config",
+        "//vendor/industio/purple_pi_oh/hdf_config/uhdf:hdf_config",
+        "//vendor/industio/purple_pi_oh/window_config:window_config"
+      ]
+    }
+  },
+  "subsystem": "product_industio"
+}

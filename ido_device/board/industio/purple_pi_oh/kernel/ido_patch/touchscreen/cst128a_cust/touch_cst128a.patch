@@ -1,0 +1,79 @@
+
+project drivers/hdf_core/
+diff --git a/adapter/khdf/linux/model/input/Kconfig b/adapter/khdf/linux/model/input/Kconfig
+index 74c26555..db178cb9 100644
+--- a/adapter/khdf/linux/model/input/Kconfig
++++ b/adapter/khdf/linux/model/input/Kconfig
+@@ -32,6 +32,13 @@ config DRIVERS_HDF_TP_5P43_FT5406
+     depends on DRIVERS_HDF_INPUT
+     help
+       Answer Y to enable HDF TP 5P43 FT5406 driver.
++
++config DRIVERS_HDF_TP_CST128A
++    bool "Enable HDF tp CST128A driver"
++    default n
++    depends on DRIVERS_HDF_INPUT
++    help
++      Answer Y to enable HDF TP CST128A driver.
+       
+
+       
+ config ARCH_NXP_TOUCH
+     bool "Enable HDF tp nxp ft5x06 touch"
+diff --git a/adapter/khdf/linux/model/input/Makefile b/adapter/khdf/linux/model/input/Makefile
+index 7901b255..5bcffe66 100644
+--- a/adapter/khdf/linux/model/input/Makefile
++++ b/adapter/khdf/linux/model/input/Makefile
+@@ -33,6 +33,8 @@ obj-$(CONFIG_DRIVERS_HDF_INPUT_INFRARED) += \
+               $(INPUT_ROOT_DIR)/hdf_infrared.o
+ obj-$(CONFIG_DRIVERS_HDF_TP_5P43_FT5406) += \
+               $(INPUT_ROOT_DIR)/touchscreen/touch_ft5406.o
++obj-$(CONFIG_DRIVERS_HDF_TP_CST128A) += \
++              $(INPUT_ROOT_DIR)/touchscreen/touch_cst128a.o
+ 
+ ccflags-y +=-I$(srctree)/drivers/hdf/framework/model/input/driver \
+             -I$(srctree)/drivers/hdf/framework/model/input/driver/input_bus_ops \
+diff --git a/framework/model/input/driver/hdf_touch.c b/framework/model/input/driver/hdf_touch.c
+index 5b5fad44..5e19e324 100644
+--- a/framework/model/input/driver/hdf_touch.c
++++ b/framework/model/input/driver/hdf_touch.c
+@@ -32,7 +32,7 @@
+ #define TOUCH_CHIP_NAME_LEN 10
+ 
+ #if defined(CONFIG_ARCH_ROCKCHIP)
+-#define GTP_ESD_PROTECT 1
++#define GTP_ESD_PROTECT 0
+ #define GTP_REG_CMD   0x8040
+ #define GTP_REG_CMD_1 0x8041
+ unsigned long g_timeout;
+diff --git a/framework/model/input/driver/input_config.h b/framework/model/input/driver/input_config.h
+index fb964dbf..9f04887b 100644
+--- a/framework/model/input/driver/input_config.h
++++ b/framework/model/input/driver/input_config.h
+@@ -19,6 +19,9 @@ typedef struct {
+     const char *devName;
+     uint32_t resolutionX;
+     uint32_t resolutionY;
++    uint8_t invertX;
++    uint8_t invertY;
++    uint8_t swapXY;
+ } BoardAttrCfg;
+ 
+ typedef struct {
+diff --git a/framework/model/input/driver/input_config_parser.c b/framework/model/input/driver/input_config_parser.c
+index d60edc4f..6bcadb77 100644
+--- a/framework/model/input/driver/input_config_parser.c
++++ b/framework/model/input/driver/input_config_parser.c
+@@ -120,6 +120,12 @@ static int32_t ParseAttr(struct DeviceResourceIface *parser, const struct Device
+     CHECK_PARSER_RET(ret, "GetUint32");
+     ret = parser->GetUint32(attrNode, "solutionY", &attr->resolutionY, 0);
+     CHECK_PARSER_RET(ret, "GetUint32");
++    ret = parser->GetUint8(attrNode, "invertX", &attr->invertX, 0);
++    CHECK_PARSER_RET(ret, "GetUint8");
++    ret = parser->GetUint8(attrNode, "invertY", &attr->invertY, 0);
++    CHECK_PARSER_RET(ret, "GetUint8");
++    ret = parser->GetUint8(attrNode, "swapXY", &attr->swapXY, 0);
++    CHECK_PARSER_RET(ret, "GetUint8");
+     return HDF_SUCCESS;
+ }
+ 
